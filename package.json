@@ -1,0 +1,12 @@
+{
+  "name": "labsync",
+  "version": "0.0.1",
+  "description": "",
+  "scripts": {},
+  "private": true,
+  "author": "Emilio Daniel Sanchez Montes",
+  "license": "ISC",
+  "devDependencies": {
+    "nx": "^17.1.3"
+  }
+}
