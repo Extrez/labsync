@@ -7,9 +7,7 @@
 	},
 	"customizations": {
 		"vscode": {
-			"extensions": [
-				"vivaxy.vscode-conventional-commits"
-			]
+			"extensions": ["vivaxy.vscode-conventional-commits", "esbenp.prettier-vscode"]
 		}
 	},
 	"remoteUser": "root"
