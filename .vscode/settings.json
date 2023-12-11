@@ -1,4 +1,10 @@
 {
-	"conventionalCommits.scopes": ["monorepo"],
-	"editor.defaultFormatter": "esbenp.prettier-vscode"
+	"conventionalCommits.scopes": ["monorepo", "webapp"],
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"files.associations": {
+		"*.css": "tailwindcss"
+	},
+	"editor.quickSuggestions": {
+		"strings": "on"
+	}
 }

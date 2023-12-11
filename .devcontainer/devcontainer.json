@@ -1,16 +1,13 @@
 {
-	"name": "Go",
-	"image": "mcr.microsoft.com/devcontainers/go:1-1.21-bullseye",
-	"features": {
-		"ghcr.io/devcontainers/features/aws-cli:1": {},
-		"ghcr.io/devcontainers/features/node:1": {}
-	},
+	"name": "Svelte",
+	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bullseye",
 	"customizations": {
 		"vscode": {
 			"extensions": [
 				"vivaxy.vscode-conventional-commits",
 				"esbenp.prettier-vscode",
-				"svelte.svelte-vscode"
+				"svelte.svelte-vscode",
+				"bradlc.vscode-tailwindcss"
 			]
 		}
 	},
