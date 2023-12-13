@@ -1,0 +1,8 @@
+{
+	"name": "svelteapp",
+	"$schema": "../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "apps/svelteapp/src",
+	"projectType": "application",
+	"tags": [],
+	"targets": {}
+}
