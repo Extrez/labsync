@@ -1,5 +1,5 @@
 {
-	"conventionalCommits.scopes": ["monorepo", "webapp"],
+	"conventionalCommits.scopes": ["monorepo", "webapp", "authentication"],
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"files.associations": {
 		"*.css": "tailwindcss"
