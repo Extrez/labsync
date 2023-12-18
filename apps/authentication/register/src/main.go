@@ -2,13 +2,18 @@ package main
 
 import (
 	"context"
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/base64"
 	"encoding/json"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
 )
@@ -22,9 +27,15 @@ type RequestBody struct {
 }
 
 type ResponseBody struct {
-	Message     string
-	Success     bool
-	AccessToken string
+	Message     string `json:"message"`
+	Success     bool   `json:"success"`
+	AccessToken string `json:"access_token"`
+}
+
+func ComputeSecretHash(clientId, clientSecret, username string) string {
+	mac := hmac.New(sha256.New, []byte(clientSecret))
+	mac.Write([]byte(username + clientId))
+	return base64.StdEncoding.EncodeToString(mac.Sum(nil))
 }
 
 func Handler(ctx context.Context, request events.APIGatewayProxyRequest, cognitoClient *cognitoidentityprovider.CognitoIdentityProvider) (events.APIGatewayProxyResponse, error) {
@@ -32,35 +43,63 @@ func Handler(ctx context.Context, request events.APIGatewayProxyRequest, cognito
 	err := json.Unmarshal([]byte(request.Body), &requestBody)
 
 	if err != nil {
-		return events.APIGatewayProxyResponse{StatusCode: http.StatusBadRequest}, err
+		return events.APIGatewayProxyResponse{StatusCode: http.StatusBadRequest}, nil
 	}
 
+	userPoolID := os.Getenv("COGNITO_USER_POOL_ID")
+	clientSecret := os.Getenv("COGNITO_CLIENT_SECRET")
+
+	secretHash := ComputeSecretHash(userPoolID, clientSecret, requestBody.Username)
+
 	signUpInput := &cognitoidentityprovider.SignUpInput{
-		ClientId: aws.String("Cognito_client_id"),
-		Username: aws.String(requestBody.Username),
-		Password: aws.String(requestBody.Password),
+		ClientId:   aws.String(userPoolID),
+		SecretHash: aws.String(secretHash),
+		Username:   aws.String(requestBody.Username),
+		Password:   aws.String(requestBody.Password),
 		UserAttributes: []*cognitoidentityprovider.AttributeType{
 			{
 				Name:  aws.String("email"),
 				Value: aws.String(requestBody.Email),
 			},
 			{
-				Name:  aws.String("fullName"),
+				Name:  aws.String("name"),
 				Value: aws.String(requestBody.FullName),
 			},
 			{
-				Name:  aws.String("phoneNumber"),
+				Name:  aws.String("phone_number"),
 				Value: aws.String(requestBody.PhoneNumber),
 			},
 		},
 	}
 
 	_, err = cognitoClient.SignUp(signUpInput)
-	
+
 	if err != nil {
+		responseBody := ResponseBody{
+			Message:     "Registration successful",
+			Success:     false,
+			AccessToken: "Internal Server Error",
+		}
+
+		resBodyBytes, _ := json.Marshal(responseBody)
+
+		if awsErr, ok := err.(awserr.Error); ok {
+			// Check if the error is UsernameExistsException
+			if awsErr.Code() == cognitoidentityprovider.ErrCodeUsernameExistsException {
+				return events.APIGatewayProxyResponse{
+					StatusCode: http.StatusConflict,
+					Body:       string(resBodyBytes),
+				}, nil
+			}
+		}
+
 		log.Printf("Failed at creating new user: %v", err)
-		return events.APIGatewayProxyResponse{StatusCode: http.StatusInternalServerError}, err
-	}	
+
+		return events.APIGatewayProxyResponse{
+			StatusCode: http.StatusInternalServerError,
+			Body:       string(resBodyBytes),
+		}, err
+	}
 
 	responseBody := ResponseBody{
 		Message:     "Registration successful",
@@ -76,17 +115,14 @@ func Handler(ctx context.Context, request events.APIGatewayProxyRequest, cognito
 }
 
 func main() {
-	// Initialize AWS Session
-    sess, err := session.NewSession()
-    if err != nil {
-        panic(err)
-    }
+	sess, err := session.NewSession()
+	if err != nil {
+		panic(err)
+	}
 
-    // Create Cognito client
-    cognitoClient := cognitoidentityprovider.New(sess)
+	cognitoClient := cognitoidentityprovider.New(sess)
 
-    // Start the lambda function with the real Cognito client
-    lambda.Start(func(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-        return Handler(ctx, request, cognitoClient)
-    })
+	lambda.Start(func(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+		return Handler(ctx, request, cognitoClient)
+	})
 }

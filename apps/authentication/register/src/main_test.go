@@ -13,18 +13,18 @@ import (
 )
 
 func TestSuccessfulRegistration(t *testing.T) {
-    sess := mock.Session
-    sess.Config.Region = aws.String("us-west-2")
-    cognitoClient := cognitoidentityprovider.New(sess)
+	sess := mock.Session
+	sess.Config.Region = aws.String("us-west-2")
+	cognitoClient := cognitoidentityprovider.New(sess)
 
-    t.Run("Successful Registration", func(t *testing.T) {
-        request := events.APIGatewayProxyRequest{
-            Body: `{"username":"testuser", "email":"test@example.com", "password":"password123", "fullName":"Test User", "phoneNumber":"1234567890"}`,
-        }
+	t.Run("Successful Registration", func(t *testing.T) {
+		request := events.APIGatewayProxyRequest{
+			Body: `{"username":"testuser", "email":"test@example.com", "password":"Password123!", "fullName":"Test User", "phoneNumber":"+11234567890"}`,
+		}
 
-        response, err := Handler(context.Background(), request, cognitoClient)
+		response, err := Handler(context.Background(), request, cognitoClient)
 
-        assert.NoError(t, err)
-        assert.Equal(t, http.StatusCreated, response.StatusCode)
-    })
+		assert.NoError(t, err)
+		assert.Equal(t, http.StatusCreated, response.StatusCode)
+	})
 }

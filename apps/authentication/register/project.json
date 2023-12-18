@@ -9,10 +9,7 @@
 		"build": {
 			"executor": "nx:run-commands",
 			"options": {
-				"commands": [
-					"GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o=./dist/authentication/register/bootstrap ./apps/authentication/register/src/main.go",
-					"zip -j ./dist/authentication/register/bootstrap.zip ./dist/authentication/register/bootstrap"
-				],
+				"command": "GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o=./dist/authentication/register/bootstrap ./apps/authentication/register/src/main.go",
 				"parallel": false
 			}
 		}
