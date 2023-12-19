@@ -1,4 +1,4 @@
-module github.com/authentication/register
+module github.com/auth/register
 
 go 1.21.5
 

@@ -1,0 +1,17 @@
+{
+	"root": "apps/auth/register",
+	"name": "register",
+	"$schema": "../../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "apps/auth/register/src",
+	"projectType": "application",
+	"tags": [],
+	"targets": {
+		"build": {
+			"executor": "nx:run-commands",
+			"options": {
+				"command": "GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o=./dist/auth/register/bootstrap ./apps/auth/register/src/main.go",
+				"parallel": false
+			}
+		}
+	}
+}

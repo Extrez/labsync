@@ -33,8 +33,8 @@ resource "aws_iam_role" "iam_for_lambda" {
 
 data "archive_file" "register_lambda" {
   type        = "zip"
-  source_file = "${path.module}/../dist/authentication/register/bootstrap"
-  output_path = "${path.module}/../dist/authentication/register/register.zip"
+  source_file = "${path.module}/../dist/auth/register/bootstrap"
+  output_path = "${path.module}/../dist/auth/register/register.zip"
 }
 
 resource "aws_lambda_function" "register" {
@@ -50,7 +50,7 @@ resource "aws_lambda_function" "register" {
 
   environment {
     variables = {
-      COGNITO_USER_POOL_ID  = aws_cognito_user_pool_client.user_pool_client.id
+      COGNITO_CLIENT_ID     = aws_cognito_user_pool_client.user_pool_client.id
       COGNITO_CLIENT_SECRET = aws_cognito_user_pool_client.user_pool_client.client_secret
     }
   }
