@@ -1,19 +1,24 @@
 {
-	"conventionalCommits.scopes": ["monorepo", "webapp", "authentication", "infra"],
-	"editor.defaultFormatter": "esbenp.prettier-vscode",
-	"files.associations": {
-		"*.css": "tailwindcss"
-	},
-	"editor.quickSuggestions": {
-		"strings": "on"
-	},
-	"[svelte]": {
-		"editor.defaultFormatter": "svelte.svelte-vscode"
-	},
-	"[terraform]": {
-		"editor.defaultFormatter": "hashicorp.terraform"
-	},
-	"[go]": {
-		"editor.defaultFormatter": "golang.go"
-	}
+  "conventionalCommits.scopes": [
+    "monorepo",
+    "webapp",
+    "authentication",
+    "infra"
+  ],
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  "[svelte]": {
+    "editor.defaultFormatter": "svelte.svelte-vscode"
+  },
+  "[terraform]": {
+    "editor.defaultFormatter": "hashicorp.terraform"
+  },
+  "[go]": {
+    "editor.defaultFormatter": "golang.go"
+  }
 }

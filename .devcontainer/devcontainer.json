@@ -1,19 +1,19 @@
 {
-	"name": "Svelte",
-	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bullseye",
-	"features": {
-		"ghcr.io/devcontainers/features/go": {},
-		"ghcr.io/devcontainers/features/terraform": {}
-	},
-	"customizations": {
-		"vscode": {
-			"extensions": [
-				"vivaxy.vscode-conventional-commits",
-				"esbenp.prettier-vscode",
-				"svelte.svelte-vscode",
-				"bradlc.vscode-tailwindcss"
-			]
-		}
-	},
-	"remoteUser": "root"
+  "name": "Svelte",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bullseye",
+  "features": {
+    "ghcr.io/devcontainers/features/go": {},
+    "ghcr.io/devcontainers/features/terraform": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vivaxy.vscode-conventional-commits",
+        "esbenp.prettier-vscode",
+        "svelte.svelte-vscode",
+        "bradlc.vscode-tailwindcss"
+      ]
+    }
+  },
+  "remoteUser": "root"
 }
